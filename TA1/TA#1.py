@@ -1,12 +1,12 @@
-text = input("Enter a string: ")
+text = input("Enter string: ")
 vowels = 0
 consonants = 0
 spaces = 0
 others = 0
 
-vowel_set = "AEIOUaeiou"
+alph_vowel = "AEIOUaeiou"
 for char in text:
-    if char in vowel_set:  
+    if char in alph_vowel:  
         vowels += 1
     elif char.isalpha():
         consonants += 1
