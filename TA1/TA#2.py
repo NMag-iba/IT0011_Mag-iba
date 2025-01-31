@@ -1,7 +1,7 @@
 text = input("Enter number to count sum: ")
-sum = 0
+total = 0 
 
 for char in text:
-    if char.isdigit():  
-        sum += int(char)  
-print("Sum of digits:", sum)
+    if char >= '0' and char <= '9':
+        total = total + int(char) 
+print("Sum:", total)
