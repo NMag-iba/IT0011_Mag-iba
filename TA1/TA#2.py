@@ -1,4 +1,4 @@
-text = input("Enter a string containing digits: ")
+text = input("Enter number to count sum: ")
 sum = 0
 
 for char in text:
