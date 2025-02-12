@@ -1,5 +1,5 @@
 try:
-    with open("numbers.txt", 'r') as file:
+    with open("TECHNICAL_MIDTERM/numbers.txt", 'r') as file:
         line_num = 1
         for line in file:
             numbers = line.strip().split(',')
