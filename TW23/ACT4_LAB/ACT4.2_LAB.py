@@ -5,8 +5,7 @@ lines = file.readlines()
 
 if len(lines) == 0:
     file.write("Currency\n") 
-    file.write("PHP,57.94\n")   
-    file.write("EUR,0.96\n")
+    file.write("PHP,57.94\n")
     file.flush() 
     file.seek(0) 
     lines = file.readlines() 
@@ -31,6 +30,6 @@ currency = input("What currency you want to have? ").strip().upper()
 if currency in currencies:
     converted_amount = dollars * exchange_rates[currency]
     print("\nDollar:", dollars, "USD")
-    print(currency + ":", converted_amount)
+    print("Philippine Peso:", converted_amount)
 else:
-    print("Currency not found.")
+    print("Currency not available.")
