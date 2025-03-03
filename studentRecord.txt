@@ -1,4 +1,3 @@
 312358,Nhica,Mag-iba,98,100
 881888,Caleb,Cruz,96,100
-554852,Mary,Salvador,94,100
-123456,Nathan,Cruz,99,100
+554852,Mariane,Salvador,94,100
