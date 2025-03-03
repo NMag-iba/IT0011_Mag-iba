@@ -1,11 +1,8 @@
-import ast  # Safe alternative to eval()
-
-students = []
-filename = "studentRecord.txt"  # Default existing file
+students = []  
 
 while True:
     print("----------------------------------")
-    print("                Home                ")
+    print("               Home               ")
     print("----------------------------------")
     print("1. Open File")
     print("2. Save File")
@@ -17,156 +14,147 @@ while True:
     print("8. Delete Record")
     print("0. Exit")
     print("----------------------------------")
-
-    choice = input("Choose from 0-8: ").strip()
+    choice = input("Choose from 0-8: ")
     print("----------------------------------")
 
-    if choice == "1":
-        print(f"Existing File: {filename}")
+    if choice == "1": 
+        existing_file = "studentRecord.txt"  
+        print(f"Opening file: {existing_file}")
         print("----------------------------------")
-
-        while True:
-            file_input = input("Enter the file name: ").strip()
-
-            try:
-                with open(file_input, "r") as file:
-                    lines = file.readlines()
-
-                students.clear()  # Clear old data before reloading
-
-                for line in lines:
-                    line = line.strip()
-                    if line:  # Skip empty lines
-                        try:
-                            student_data = ast.literal_eval(line)  # Safe alternative to eval()
-                            if isinstance(student_data, tuple) and len(student_data) == 4:
-                                # Ensure Student ID is always stored as a string
-                                student_data = (str(student_data[0]), student_data[1], student_data[2], student_data[3])
-                                students.append(student_data)
-                            else:
-                                print(f"Skipping invalid record: {line}")
-                        except (SyntaxError, ValueError):
-                            print(f"Skipping invalid line: {line}")
-
-                filename = file_input  # Update filename
-                print(f"File '{filename}' successfully opened!")
-                break
-
-            except FileNotFoundError:
-                print("File not found.")
-                create_new = input("Do you want to create a new file? (yes/no): ").strip().lower()
-                if create_new == "yes":
-                    filename = input("Enter new file name: ").strip()
-                    open(filename, "w").close()  # Create the new file
-                    print(f"New file '{filename}' created!")
-                    break
-                else:
-                    print("Returning to the main menu.")
-                    break
-
-    elif choice == "2":
-        if students:
-            try:
-                with open(filename, "w") as file:
-                    for student in students:
-                        file.write(str(student) + "\n")
-                print(f"File '{filename}' saved successfully.")
-            except Exception as e:
-                print(f"Error saving file: {e}")
-        else:
-            print("No records to save. Open a file first.")
-
-    elif choice == "3":
-        if students:
-            new_filename = input("Enter new file name: ").strip()
-            try:
-                with open(new_filename, "w") as file:
-                    for student in students:
-                        file.write(str(student) + "\n")
-                filename = new_filename
-                print(f"File saved as '{filename}' successfully.")
-            except Exception as e:
-                print(f"Error saving file: {e}")
-        else:
-            print("No records to save. Open a file first.")
-
-    elif choice == "4":
-        if not students:
-            print("No records found. Open a file first.")
-        else:
-            print("1. Order by last name")
-            print("2. Order by grade (60% Class Standing, 40% Major Exam)")
-            print("----------------------------------")
-            sub_choice = input("Choose output (1-2): ").strip()
-            print("----------------------------------")
-
-            if sub_choice == "1":
-                students.sort(key=lambda x: x[1][1].lower())  # Sort by last name (case insensitive)
-            elif sub_choice == "2":
-                students.sort(key=lambda x: (0.6 * x[2]) + (0.4 * x[3]), reverse=True)  # Sort by computed grade
-            else:
-                print("Invalid choice for option 4.")
-                continue  # Return to menu
-
-            for student in students:
-                computed_grade = (0.6 * student[2]) + (0.4 * student[3])
-                print(f"{student} -> Computed Grade: {computed_grade:.2f}")
-
-    elif choice == "5":
-        if not students:
-            print("No records found. Open a file first.")
-        else:
-            student_id = input("Enter Student ID: ").strip()
-            found = next((s for s in students if str(s[0]).strip() == student_id.strip()), None)
-            if found:
-                print(found)
-            else:
-                print("Student ID not found.")
-
-    elif choice == "6":
-        student_id = input("Enter Student ID: ").strip()
-        first_name = input("Enter First Name: ").strip()
-        last_name = input("Enter Last Name: ").strip()
+        
+        filename = input("Enter file name: ")  
 
         try:
-            class_standing = float(input("Enter Class Standing: ").strip())
-            major_exam = float(input("Enter Major Exam Grade: ").strip())
-            students.append((student_id, (first_name, last_name), class_standing, major_exam))
-            print("Record added successfully.")
-        except ValueError:
-            print("Invalid input. Class Standing and Major Exam must be numbers.")
+            with open(filename, "r") as file:
+                students = []
+                
+                for line in file:
+                    line = line.strip()
+                    if not line:
+                        continue  
 
+                    parts = line.split(",")
+
+                    if len(parts) == 5:
+                        student = (
+                            int(parts[0]),  
+                            (parts[1], parts[2]),
+                            int(parts[3]), 
+                            int(parts[4])  
+                        )
+                        students.append(student)
+                    else:
+                        print(f"Skipping invalid line: {line}")
+            print("File successfully opened!")
+        
+        except FileNotFoundError:
+            print(f"File '{filename}' does not exist.")
+            create_new = input("Would you like to create a new file? (yes/no): ").strip().lower()
+            
+            if create_new == "yes":
+                with open(filename, "w") as file:
+                    print(f"New file '{filename}' created successfully.")
+            else:
+                print("Returning to main menu...")
+    
+    elif choice == "2":
+        with open("studentRecord.txt", "w") as file:
+            for student in students:
+                file.write(f"{student[0]},{student[1][0]},{student[1][1]},{student[2]},{student[3]}\n")
+        print("File saved successfully!")
+    elif choice == "3":
+        filename = input("Enter new file name: ")
+        with open(filename, "w") as file:
+            for student in students:
+                file.write(f"{student[0]},{student[1][0]},{student[1][1]},{student[2]},{student[3]}\n")
+        print("File saved successfully!")
+    elif choice == "4":
+        if not students:
+            print("Please open a file.")
+            continue
+        print("4.2 Order by last name")
+        print("4.3 Order by grade")
+        print("----------------------------------")
+        sub_choice = input("Choose order: ")
+        print("----------------------------------")
+        if sub_choice == "4.2":
+            sorted_students = sorted(students, key=lambda x: x[1][1])
+            for student in sorted_students:
+                print("Student ID:", student[0])
+                print("Student Name:", student[1][0], student[1][1])
+                print("Student Class Standing:", student[2])
+                print("Major Exam Grade:", student[3])
+                print("----------------------------------")
+        elif sub_choice == "4.3":
+            sorted_students = sorted(students, key=lambda x: (0.6 * x[2] + 0.4 * x[3]), reverse=True)
+            for student in sorted_students:
+                final_grade = 0.6 * student[2] + 0.4 * student[3]
+                print("Student ID:", student[0])
+                print("Student Name:", student[1][0], student[1][1])
+                print("Student Class Standing:", student[2])
+                print("Major Exam Grade:", student[3])
+                print("Final Grade:", f"{final_grade:.2f}")
+                print("----------------------------------")
+        else:
+            print("Invalid choice for option 4.")
+    elif choice == "5":
+        if not students:
+            print("Please open a file.")
+            continue
+        student_id = input("Enter Student ID to search: ")
+        found = False
+        for student in students:
+            if str(student[0]) == student_id:
+                print("Student Record Found:")
+                print("Student ID:", student[0])
+                print("Student Name:", student[1][0], student[1][1])
+                print("Student Class Standing:", student[2])
+                print("Major Exam Grade:", student[3])
+                found = True
+                break
+        if not found:
+            print("Student ID not found.")
+    elif choice == "6":
+        print("Adding record...")
+        student_id = int(input("Enter Student ID (6-digit number): "))
+        first_name = input("Enter First Name: ")
+        last_name = input("Enter Last Name: ")
+        class_standing = int(input("Enter Class Standing Grade: "))
+        major_exam = int(input("Enter Major Exam Grade: "))
+        students.append((student_id, (first_name, last_name), class_standing, major_exam))
+        print("Record added successfully!")
     elif choice == "7":
-        student_id = input("Enter Student ID to edit: ").strip()
+        print("Editing record...")
+        student_id = input("Enter Student ID to edit: ")
         for i, student in enumerate(students):
-            if str(student[0]).strip() == student_id.strip():
-                first_name = input("Enter new First Name: ").strip()
-                last_name = input("Enter new Last Name: ").strip()
-
-                try:
-                    class_standing = float(input("Enter new Class Standing: ").strip())
-                    major_exam = float(input("Enter new Major Exam Grade: ").strip())
-                    students[i] = (student_id, (first_name, last_name), class_standing, major_exam)
-                    print("Record updated successfully.")
-                except ValueError:
-                    print("Invalid input. Class Standing and Major Exam must be numbers.")
+            if str(student[0]) == student_id:
+                print("Editing Student Record:")
+                first_name = input(f"Enter First Name ({student[1][0]}): ") or student[1][0]
+                last_name = input(f"Enter Last Name ({student[1][1]}): ") or student[1][1]
+                class_standing = input(f"Enter Class Standing Grade ({student[2]}): ")
+                major_exam = input(f"Enter Major Exam Grade ({student[3]}): ")
+                students[i] = (
+                    student[0],
+                    (first_name, last_name),
+                    int(class_standing) if class_standing else student[2],
+                    int(major_exam) if major_exam else student[3]
+                )
+                print("Record updated successfully!")
                 break
         else:
             print("Student ID not found.")
-
     elif choice == "8":
-        student_id = input("Enter Student ID to delete: ").strip()
+        print("Deleting record...")
+        student_id = input("Enter Student ID to delete: ")
         for i, student in enumerate(students):
-            if str(student[0]).strip() == student_id.strip():
+            if str(student[0]) == student_id:
                 del students[i]
-                print("Record deleted successfully.")
+                print("Record deleted successfully!")
                 break
         else:
             print("Student ID not found.")
-
     elif choice == "0":
-        print("Exiting the program...")
-        break
-
+        print("Exiting program...")
+        break 
     else:
         print("Invalid choice. Please select a number from 0-8.")
