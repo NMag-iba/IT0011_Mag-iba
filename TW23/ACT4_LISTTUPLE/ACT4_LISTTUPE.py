@@ -19,7 +19,7 @@ while True:
 
     if choice == "1": 
         existing_file = "studentRecord.txt"  
-        print(f"Opening file: {existing_file}")
+        print(f"Existing file: {existing_file}")
         print("----------------------------------")
         
         filename = input("Enter file name: ")  
