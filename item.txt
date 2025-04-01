@@ -1,0 +1,5 @@
+123000,The Silent Echo,Myster/thriller,500.0
+321000,Whispers of the Moon,Fantasy/romance,225.0
+456000,The Last Ember,Adventure,841.0
+789000,Crimson lies,Psychological Thriller,632.0
+123654,The Book Thief,Fantasy,852.0
